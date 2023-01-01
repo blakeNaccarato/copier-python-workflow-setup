@@ -1,5 +1,10 @@
 name: "hello"
 description: "hello"
+inputs:
+  python-version:
+    description: "Python version to use."
+    required: true
+    default: "3.11"
 runs:
   using: "composite"
   steps:
@@ -8,7 +13,7 @@ runs:
         submodules: true
     - uses: "actions/setup-python@v4"
       with:
-        python-version: "3.10"
+        python-version: ${{ inputs.python-version }}
     - run: >-
         pip install -U pip setuptools wheel
         pip install -r .tools/requirements/requirements_cicd.txt
