@@ -9,9 +9,8 @@ runs:
     - uses: "actions/setup-python@v4"
       with:
         python-version: "3.10"
-    - run: "pip install -U pip setuptools wheel"
-      shell: "bash"
-    - run: "pip install -r .tools/requirements/requirements_cicd.txt"
-      shell: "bash"
-    - run: "pip install ."
+    - run: >-
+        pip install -U pip setuptools wheel
+        pip install -r .tools/requirements/requirements_cicd.txt
+        pip install .
       shell: "bash"
