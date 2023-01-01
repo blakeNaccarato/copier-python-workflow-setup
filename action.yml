@@ -1,5 +1,7 @@
-name: hello
+name: "hello"
+description: "hello"
 runs:
   using: "composite"
   steps:
     - run: "echo hello"
+      shell: "pwsh"
