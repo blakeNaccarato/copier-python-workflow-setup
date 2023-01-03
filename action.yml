@@ -5,6 +5,10 @@ inputs:
     description: "Python version to use."
     required: true
     default: "3.11"
+  install-project:
+    description: "Install the project."
+    required: false
+    default: "true"
 runs:
   using: "composite"
   steps:
@@ -17,5 +21,7 @@ runs:
     - run: |-
         pip install -U pip setuptools wheel
         pip install -r .tools/requirements/requirements_cicd.txt
-        pip install .
+      shell: "bash"
+    - if: ${{ inputs.install-project }}
+      run: pip install .
       shell: "bash"
