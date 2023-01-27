@@ -19,7 +19,9 @@ runs:
       with:
         python-version: ${{ inputs.python-version }}
         cache: "pip"
-        cache-dependency-path: ".tools/requirements/requirements*.txt"
+        cache-dependency-path: |
+          ".tools/requirements/requirements*.txt"
+          "requirements.txt"
     - run: |-
         pip install -U pip setuptools wheel
         pip install -r .tools/requirements/requirements_cicd.txt
