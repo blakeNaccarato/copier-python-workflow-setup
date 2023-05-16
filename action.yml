@@ -15,7 +15,7 @@ runs:
     - uses: "actions/checkout@v3.5.2"
       with:
         submodules: true
-    - uses: "actions/setup-python@v4.5.0"
+    - uses: "actions/setup-python@v4.6.0"
       with:
         python-version: ${{ inputs.python-version }}
         cache: "pip"
