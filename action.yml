@@ -1,10 +1,14 @@
 name: "Set up CI in projects templated with blakeNaccarato/copier-python"
-description: "Updates the project template and composes `pyproject.toml`."
+description: "Prepare to run CI."
 inputs:
   python-version:
     description: "Python version to use."
     required: true
     default: "3.11"
+  latest-pins:
+    description: "Whether to install the latest pin on dependencies."
+    required: false
+    default: "true"
   install-project:
     description: "Whether to install the project dependencies."
     required: false
@@ -17,22 +21,25 @@ runs:
         submodules: true
     - uses: "actions/setup-python@v4.7.0"
       with:
-        python-version: ${{ inputs.python-version }}
+        python-version: "${{ inputs.python-version }}"
         cache: "pip"
-        cache-dependency-path: |
-          requirements.txt
-          .tools/requirements/requirements*.txt
-    - name: "Install dependencies, bump template, compose `pyproject.toml`."
+        cache-dependency-path: ".tools/requirements/requirements*.txt"
+    - name: "Upgrade pip and setuptools. Install wheel."
+      shell: "pwsh"
+      run: "python -m pip install --upgrade pip setuptools wheel"
+    - name: "Install project with the latest supported requirements."
+      if: "${{ inputs.install-project && inputs.latest-pins }}"
       shell: "pwsh"
       run: |-
-        python -m pip install --upgrade pip
-        pip install --upgrade setuptools wheel
-        pip install --requirement .tools/requirements/requirements_ci.txt
-        copier update --defaults --vcs-ref $(git rev-parse HEAD:template)
-        python .tools/scripts/compose_pyproject.py
-    - name: "Install the project and its dependencies."
-      if: ${{ inputs.install-project }}
+        pip install --no-deps . --requirement .tools/requirements/requirements_nodeps.txt
+        pip install --requirement '.tools/requirements/requirements.txt' --requirement .tools/requirements/requirements_ci.txt
+    - name: "Install project."
+      if: "${{ inputs.install-project && !inputs.latest-pins }}"
       shell: "pwsh"
       run: |-
-        pip install --no-deps .
-        pip install --upgrade --requirement 'requirements.txt'
+        pip install --no-deps --requirement .tools/requirements/requirements_nodeps.txt
+        pip install . --requirement .tools/requirements/requirements_ci.txt
+    - name: "Install developer dependencies."
+      if: "${{ !inputs.install-project }}"
+      shell: "pwsh"
+      run: "pip install --requirement .tools/requirements/requirements_ci.txt"
