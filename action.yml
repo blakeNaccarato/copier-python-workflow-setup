@@ -26,7 +26,8 @@ runs:
         cache-dependency-path: ".tools/requirements/requirements*.txt"
     - name: "Install core dependencies."
       shell: "pwsh"
-      run: "python -m pip install --requirement .tools/requirements/requirements_core.txt"
+      run: |-
+        python -m pip install --requirement '.tools/requirements/requirements_core.txt'
     - name: "Update the template if necessary."
       shell: "pwsh"
       run: "copier update --defaults --vcs-ref $(git rev-parse HEAD:template)"
@@ -37,15 +38,16 @@ runs:
       if: "${{ inputs.install-project && inputs.latest-pins }}"
       shell: "pwsh"
       run: |-
-        python -m pip install --no-deps . --requirement .tools/requirements/requirements_nodeps.txt
-        python -m pip install --requirement '.tools/requirements/requirements.txt' --requirement .tools/requirements/requirements_ci.txt
+        python -m pip install --no-deps . --requirement '.tools/requirements/requirements_nodeps.txt'
+        python -m pip install --requirement '.tools/requirements/requirements.txt' --requirement '.tools/requirements/requirements_ci.txt'
     - name: "Install project."
       if: "${{ inputs.install-project && !inputs.latest-pins }}"
       shell: "pwsh"
       run: |-
-        python -m pip install --no-deps --requirement .tools/requirements/requirements_nodeps.txt
-        python -m pip install . --requirement .tools/requirements/requirements_ci.txt
+        python -m pip install --no-deps --requirement '.tools/requirements/requirements_nodeps.txt'
+        python -m pip install . --requirement '.tools/requirements/requirements_ci.txt'
     - name: "Install developer dependencies."
       if: "${{ !inputs.install-project }}"
       shell: "pwsh"
-      run: "python -m pip install --requirement .tools/requirements/requirements_ci.txt"
+      run: |-
+        python -m pip install --requirement '.tools/requirements/requirements_ci.txt'
