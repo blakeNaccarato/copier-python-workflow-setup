@@ -1,2 +1,6 @@
 ci:
   autoupdate_schedule: "quarterly"
+repos:
+  - repo: "meta"
+    hooks:
+      - id: "check-hooks-apply"
