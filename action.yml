@@ -16,7 +16,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: "actions/checkout@v4.1.4"
+    - uses: "actions/checkout@v4.1.7"
       with:
         submodules: true
     - uses: "actions/setup-python@v5.1.0"
